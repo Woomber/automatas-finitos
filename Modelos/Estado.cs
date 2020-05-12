@@ -1,13 +1,14 @@
-﻿using System;
+﻿using AutomatasFinitos.Excepciones;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace AutomatasFinitos
+namespace AutomatasFinitos.Modelos
 {
     class Estado
     {
-        protected Dictionary<char, Estado> Transiciones { set; get; }
-        
+        public Dictionary<char, Estado> Transiciones { get; protected set; }
+        public Automata AutomataPadre { get; set; }
         public bool Aceptacion { get; protected set; }
 
         public Estado(bool aceptacion)
@@ -27,8 +28,13 @@ namespace AutomatasFinitos
             {
                 return siguiente;
             }
-            return this;
-            
+            // No encontró la transición
+            // Buscar si entrada aparece en el alfabeto
+            if (AutomataPadre.Alfabeto.Contains(entrada))
+            {
+                return this;
+            }
+            throw new TransitionNotInAlphabetException();
         }
     }
 }
