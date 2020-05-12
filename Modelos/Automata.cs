@@ -23,16 +23,19 @@ namespace AutomatasFinitos.Modelos
 
         public void AgregarEstado(Estado estado)
         {
-            Estados.Add(estado);
-            estado.AutomataPadre = this;
             foreach(var transicion in estado.Transiciones)
             {
-                if(!AlfabetoAutomatico && !Alfabeto.Contains(transicion.Key))
+                if(AlfabetoAutomatico)
+                {
+                    Alfabeto.Add(transicion.Key);
+                }
+                else if(!Alfabeto.Contains(transicion.Key))
                 {
                     throw new TransitionNotInAlphabetException();
                 }
-                Alfabeto.Add(transicion.Key);
             }
+            Estados.Add(estado);
+            estado.AutomataPadre = this;
         }
 
         public void AgregarAlfabeto(params char[] alfabeto)
